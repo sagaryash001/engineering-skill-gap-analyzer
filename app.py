@@ -36,13 +36,25 @@ if st.button("Analyze Job"):
         category = model.predict(job_vec)[0]
 
         # Simple employability logic (demo)
-        skill_count = len(job_text.split())
-        if skill_count < 50:
+        # Skill-based readiness estimation
+        skills = [
+            "python", "java", "sql", "machine learning", "excel",
+            "django", "flask", "aws", "data analysis", "git"
+        ]
+
+        job_text_lower = job_text.lower()
+        matched_skills = [s for s in skills if s in job_text_lower]
+        skill_count = len(matched_skills)
+
+        if skill_count <= 1:
             readiness = "Low"
-        elif skill_count < 120:
+        elif skill_count <= 3:
             readiness = "Medium"
         else:
             readiness = "High"
+
+        st.write("🛠️ Detected Skills:", matched_skills)
+
 
         st.success(f"🔍 Predicted Job Category: **{category}**")
         st.info(f"📈 Estimated Employability Readiness: **{readiness}**")
